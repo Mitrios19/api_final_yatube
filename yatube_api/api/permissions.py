@@ -16,5 +16,4 @@ class AuthorOrReadOnly(permissions.BasePermission):
 
 class CanSubscribe(permissions.BasePermission):
     def has_permission(self, request, view):
-        # Разрешаем доступ только аутентифицированным пользователям
         return request.user.is_authenticated
