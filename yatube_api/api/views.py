@@ -1,11 +1,11 @@
 from posts.models import Post, Group, Comment, User, Follow
-from .serializers import (PostSerializer, UserSerializer,
+from .serializers import (PostSerializer,
                           GroupSerializer, CommentSerializer,
                           FollowSerializer)
 from .permissions import AuthorOrReadOnly, CanSubscribe
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
-from django_filters.rest_framework import DjangoFilterBackend
+
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
@@ -39,8 +39,6 @@ class FollowViewSet(viewsets.ModelViewSet):
     queryset = Follow.objects.all()
     serializer_class = FollowSerializer
     permission_classes = (CanSubscribe,)
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['following__username']  # Поиск по имени пользователя, на которого подписан
 
     def get_queryset(self):
         # Возвращаем только подписки текущего пользователя
@@ -56,4 +54,3 @@ class FollowViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-

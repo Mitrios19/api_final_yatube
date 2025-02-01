@@ -1,5 +1,3 @@
-from importlib.metadata import pass_none
-
 from django.contrib.auth import get_user_model
 from django.db import models
 

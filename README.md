@@ -1,45 +1,109 @@
-# api_final
-api final
-### Как запустить проект:
+# Yatube API Documentation
 
-Клонировать репозиторий и перейти в него в командной строке:
+## Описание проекта
 
-```
-git clone https://github.com/yandex-praktikum/kittygram.git
+**Yatube** — это социальная сеть для публикации постов, комментариев и подписок на других пользователей. API предоставляет возможность взаимодействовать с функционалом Yatube через HTTP-запросы.
+
+## Установка и запуск
+
+1. Клонируйте репозиторий:
+    ```bash
+    git clone https://github.com/yourusername/yatube-api.git
+    cd yatube-api
+    ```
+
+2. Установите зависимости:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+3. Примените миграции:
+    ```bash
+    python manage.py migrate
+    ```
+
+4. Запустите сервер:
+    ```bash
+    python manage.py runserver
+    ```
+
+## Использование API
+
+### Получение JWT-токена
+
+Для работы с API необходимо получить JWT-токен через эндпоинт:
+
+```http
+POST /api/v1/jwt/create/
 ```
 
-```
-cd kittygram
+Пример запроса:
+
+```json
+{
+  "username": "your_username",
+  "password": "your_password"
+}
 ```
 
-Cоздать и активировать виртуальное окружение:
+Пример ответа:
 
-```
-python3 -m venv env
-```
-
-```
-source env/bin/activate
-```
-
-Установить зависимости из файла requirements.txt:
-
-```
-python3 -m pip install --upgrade pip
+```json
+{
+  "refresh": "your_refresh_token",
+  "access": "your_access_token"
+}
 ```
 
-```
-pip install -r requirements.txt
+## Основные эндпоинты
+
+### Публикации
+```http
+GET /api/v1/posts/ - Получить список всех публикаций.
+POST /api/v1/posts/ - Создать новую публикацию.
+GET /api/v1/posts/{id}/ - Получить публикацию по ID.
+PUT /api/v1/posts/{id}/ - Обновить публикацию по ID.
+PATCH /api/v1/posts/{id}/ - Частично обновить публикацию по ID.
+DELETE /api/v1/posts/{id}/ - Удалить публикацию по ID.
 ```
 
-Выполнить миграции:
+### Комментарии
+```http
+GET /api/v1/posts/{post_id}/comments/ - Получить все комментарии к публикации.
+POST /api/v1/posts/{post_id}/comments/ - Добавить новый комментарий к публикации.
+GET /api/v1/posts/{post_id}/comments/{id}/ - Получить комментарий по ID.
+PUT /api/v1/posts/{post_id}/comments/{id}/ - Обновить комментарий по ID.
+PATCH /api/v1/posts/{post_id}/comments/{id}/ - Частично обновить комментарий по ID.
+DELETE /api/v1/posts/{post_id}/comments/{id}/ - Удалить комментарий по ID.
+```
 
-```
-python3 manage.py migrate
+### Сообщества
+```http
+GET /api/v1/groups/ - Получить список всех сообществ.
+GET /api/v1/groups/{id}/ - Получить информацию о сообществе по ID.
 ```
 
-Запустить проект:
+### Подписки
+```http
+GET /api/v1/follow/ - Получить список подписок пользователя.
+POST /api/v1/follow/ - Подписаться на другого пользователя.
+```
 
+## Примеры запросов
+
+### Получение списка публикаций
+```bash
+curl -X GET http://localhost:8000/api/v1/posts/ -H "Authorization: Bearer your_access_token"
 ```
-python3 manage.py runserver
+
+### Создание новой публикации
+```bash
+curl -X POST http://localhost:8000/api/v1/posts/ \
+  -H "Authorization: Bearer your_access_token" \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Новая публикация"}'
 ```
+
+## Авторизация
+Для доступа к защищенным эндпоинтам необходимо использовать JWT-токен, полученный через `/api/v1/jwt/create/`. Токен должен быть передан в заголовке `Authorization` в формате `Bearer <ваш_токен>`.
+
