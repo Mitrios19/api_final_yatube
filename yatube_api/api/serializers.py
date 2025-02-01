@@ -28,4 +28,13 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class FollowSerializer(serializers.ModelSerializer):
-    pass
+    class Meta:
+        model = Follow
+        fields = ('id', 'user', 'following')
+
+    def validate(self, data):
+        user = data['user']
+        following = data['following']
+        if user == following:
+            raise serializers.ValidationError("You cannot follow yourself.")
+        return data

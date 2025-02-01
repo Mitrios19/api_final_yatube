@@ -7,10 +7,11 @@ from django.urls import path, include
 
 urlpatterns = [
     path('v1/', include([
-    # базовые, для управления пользователями в Django:
-    path('auth/', include('djoser.urls')),
-    # JWT-эндпоинты, для управления JWT-токенами:
-    path('', include('djoser.urls.jwt')),
+        # базовые, для управления пользователями в Django:
+        path('auth/', include('djoser.urls')),
+        # JWT-эндпоинты, для управления JWT-токенами:
+        path('', include('djoser.urls.jwt')),
+
 
 
     ]))
