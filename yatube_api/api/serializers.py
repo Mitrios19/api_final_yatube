@@ -4,9 +4,11 @@ from posts.models import Comment, Post, Group, Follow, User
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = serializers.SlugRelatedField(slug_field='username', read_only=True)
+    author = serializers.SlugRelatedField(slug_field='username',
+                                          read_only=True)
     image = serializers.ImageField(required=False, allow_null=True)
-    group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), required=False)  # Добавьте это
+    group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(),
+                                               required=False)
 
     class Meta:
         fields = '__all__'
@@ -14,7 +16,8 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    author = serializers.SlugRelatedField(read_only=True, slug_field='username')
+    author = serializers.SlugRelatedField(read_only=True,
+                                          slug_field='username')
     post = serializers.PrimaryKeyRelatedField(read_only=True)
     created = serializers.DateTimeField(read_only=True)
 
@@ -51,5 +54,6 @@ class FollowSerializer(serializers.ModelSerializer):
         if user == following:
             raise serializers.ValidationError("You cannot follow yourself.")
         if Follow.objects.filter(user=user, following=following).exists():
-            raise serializers.ValidationError("You are already following this user.")
+            raise serializers.ValidationError(
+                "You are already following this user.")
         return data
