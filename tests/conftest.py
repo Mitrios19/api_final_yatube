@@ -1,7 +1,6 @@
 import sys
 import os
 
-print("Current Working Directory:", os.getcwd())
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)

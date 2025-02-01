@@ -1,9 +1,19 @@
 from django.urls import path, include
+from rest_framework.authtoken import views
+from rest_framework.routers import SimpleRouter
+from .views import (PostViewSet, GroupViewSet,
+                       CommentViewSet, FollowViewSet)
 
-# {
-#    "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczODQ4MDU3NiwianRpIjoiMDU2YTEwNDBhYTllNDdjZTgxM2NhOTIzMTlmNTE5ZDkiLCJ1c2VyX2lkIjoxfQ.geaPkazJgvCIjP6ecMvsBakVA2oaU9k4ftPQx4CVZm0",
-#    "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM4NjUzMzc2LCJqdGkiOiI1M2M5MTg5OWViYmY0NGIzODc4MDk1OTQ5NzgzZWNiOCIsInVzZXJfaWQiOjF9.a4FvS6V7TvhcI6SDdNEc4ouNTAYEoXYANl0ma857Kn8"
-# }
+
+router = SimpleRouter()
+
+router.register('posts', PostViewSet)
+router.register('groups', GroupViewSet)
+router.register('follow', GroupViewSet)
+
+comment_router = SimpleRouter()
+comment_router.register(r'comments', CommentViewSet, basename='comment')
+
 
 urlpatterns = [
     path('v1/', include([
@@ -11,6 +21,8 @@ urlpatterns = [
         path('auth/', include('djoser.urls')),
         # JWT-эндпоинты, для управления JWT-токенами:
         path('', include('djoser.urls.jwt')),
+        path('', include(router.urls)),
+        path('posts/<int:post_id>/', include(comment_router.urls)),
 
 
 
